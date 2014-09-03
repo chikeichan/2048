@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048</title>
+    <style>
+      td {
+        text-align:center;
+        height: 60px;
+        width: 50px;
+      }
+      div{
+        height:50px;
+        width:80px;
+        border-radius: 15px;
+        text-align:center;
+        background-color:#0033CC;
+        vertical-align:middle;
+        position: relative;
+        display:inline-block;
+        }
+      
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+      
+    </script>
+    <script>
+      
+      function plotNum(arr,num) {
+        var x = arr[0];
+        var y = arr[1];
+        var coor = "#"+x+"x"+">#"+y+"c";
+        
+        $(coor).html(num);
+      }
+      
+      function generateNum() {
+        var emptyArray = [];
+        
+        for(i=1;i<=4;i++){
+          for(j=1;j<=4;j++){
+            var coor = "#"+i+"x"+">#"+j+"c";
+            if($(coor).html()=="") {
+              emptyArray.push([i,j]);
+            }
+          }
+        }
+        
+        var prob = Math.floor((Math.random() * emptyArray.length));
+        var gen  = Math.floor(((Math.random()*2)+1))*2;
+        
+        
+        
+        
+        plotNum(emptyArray[prob],gen);
+        
+      }
+      
+      function move(arr,newArr,num) {
+        var x = arr[0];
+        var y = arr[1];
+        var newx = newArr[0];
+        var newy = newArr[1];
+        
+        var coor = "#"+x+"x"+">#"+y+"c";
+        var newcoor = "#"+newx+"x"+">#"+newy+"c";
+        
+        if($(coor).html()!="") {
+            $(coor).html("");
+            $(newcoor).html(num);
+        }
+      }
+      
+      function moveRight() {
+        var rightArr = [[],[],[],[]];
+        var current = getCurrent();
+        
+        
+        for(i=1;i<=4;i++){
+          for(j=1;j<=4;j++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             if($(coor).html()!="") {
+              rightArr[i-1].push($(coor).html());
+               $(coor).html("");
+            }
+          }
+        }
+        
+        for(i=1;i<=4;i++){
+          for(j=4,k=rightArr[i-1].length-1;j>=1;j--,k--){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             $(coor).html(rightArr[i-1][k])
+          }
+        }
+        
+        for(i=1;i<=4;i++){
+          for(j=4;j>1;j--){
+            var coor = "#"+i+"x"+">#"+j+"c"; 
+            var nextCoor = "#"+i+"x"+">#"+(j-1)+"c";
+            if($(coor).html()==$(nextCoor).html()) {
+                $(coor).html(parseInt($(coor).html())+parseInt($(nextCoor).html()));
+                $(nextCoor).html("");
+                
+            }
+          }
+        }
+        
+        rightArr = [[],[],[],[]];
+        
+        for(i=1;i<=4;i++){
+          for(j=1;j<=4;j++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             if($(coor).html()!="") {
+              rightArr[i-1].push($(coor).html());
+               $(coor).html("");
+            }
+          }
+        }
+        
+        for(i=1;i<=4;i++){
+          for(j=4,k=rightArr[i-1].length-1;j>=1;j--,k--){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             $(coor).html(rightArr[i-1][k])
+          }
+        }
+        
+        var newpos = getCurrent();
+        var movement = false;
+        
+        for (i=0;i<4;i++) {
+          for (j=0;j<4;j++) {
+            if(current[i][j]!=newpos[i][j]){
+                movement = true;
+            }
+          }
+        }
+        
+        if (movement) {
+        generateNum();
+        }
+      }
+      
+      
+      //
+      
+      function moveLeft() {
+        var leftArr = [[],[],[],[]];
+        var current = getCurrent();
+        
+        
+        for(i=1;i<=4;i++){
+          for(j=1;j<=4;j++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             if($(coor).html()!="") {
+              leftArr[i-1].push($(coor).html());
+               $(coor).html("");
+            }
+          }
+        }
+        
+        for(i=1;i<=4;i++){
+          for(j=1,k=0;j<=4;j++,k++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             $(coor).html(leftArr[i-1][k])
+          }
+        }
+        
+        for(i=1;i<=4;i++){
+          for(j=1;j<4;j++){
+            var coor = "#"+i+"x"+">#"+j+"c"; 
+            var nextCoor = "#"+i+"x"+">#"+(j+1)+"c";
+            if($(coor).html()==$(nextCoor).html()) {
+                $(coor).html(parseInt($(coor).html())+parseInt($(nextCoor).html()));
+                $(nextCoor).html("");
+                
+            }
+          }
+        }
+        
+        leftArr = [[],[],[],[]];
+        
+        for(i=1;i<=4;i++){
+          for(j=1;j<=4;j++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             if($(coor).html()!="") {
+              leftArr[i-1].push($(coor).html());
+               $(coor).html("");
+            }
+          }
+        }
+        
+         for(i=1;i<=4;i++){
+          for(j=1,k=0;j<=4;j++,k++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             $(coor).html(leftArr[i-1][k])
+          }
+        }
+         var newpos = getCurrent();
+        var movement = false;
+        
+        for (i=0;i<4;i++) {
+          for (j=0;j<4;j++) {
+            if(current[i][j]!=newpos[i][j]){
+                movement = true;
+            }
+          }
+        }
+        
+        if (movement) {
+        generateNum();
+        }
+      }
+      
+      
+      
+      function moveUp() {
+        var UpArr = [[],[],[],[]];
+        var current = getCurrent();
+        
+        console.log(current)
+        
+        
+        for(j=1;j<=4;j++){
+          for(i=1;i<=4;i++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             if($(coor).html()!="") {
+              UpArr[j-1].push($(coor).html());
+               $(coor).html("");
+            }
+          }
+        }
+        
+        for(j=1;j<=4;j++){
+          for(i=1,k=0;i<=4;i++,k++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             $(coor).html(UpArr[j-1][k])
+          }
+        }
+        
+        for(j=1;j<=4;j++){
+          for(i=1;i<4;i++){
+            var coor = "#"+i+"x"+">#"+j+"c"; 
+            var nextCoor = "#"+(i+1)+"x"+">#"+j+"c";
+            if($(coor).html()==$(nextCoor).html()) {
+                $(coor).html(parseInt($(coor).html())+parseInt($(nextCoor).html()));
+                $(nextCoor).html("");
+                
+            }
+          }
+        }
+        
+        UpArr = [[],[],[],[]];
+        
+        for(j=1;j<=4;j++){
+          for(i=1;i<=4;i++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             if($(coor).html()!="") {
+              UpArr[j-1].push($(coor).html());
+               $(coor).html("");
+            }
+          }
+        }
+        
+        for(j=1;j<=4;j++){
+          for(i=1,k=0;i<=4;i++,k++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             $(coor).html(UpArr[j-1][k])
+          }
+        }
+         var newpos = getCurrent();
+        var movement = false;
+        
+        console.log(newpos);
+        
+        for (i=0;i<4;i++) {
+          for (j=0;j<4;j++) {
+            if(current[i][j]!=newpos[i][j]){
+                movement = true;
+            }
+          }
+        }
+        
+        if (movement) {
+        generateNum();
+        }
+      }
+      
+      function moveDown() {
+        var downArr = [[],[],[],[]];
+        var current = getCurrent();
+        
+        
+        for(j=1;j<=4;j++){
+          for(i=1;i<=4;i++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             if($(coor).html()!="") {
+              downArr[j-1].push($(coor).html());
+               $(coor).html("");
+            }
+          }
+        }
+        
+        
+        
+        for(j=1;j<=4;j++){
+          for(i=4,k=downArr[j-1].length-1;i>=1;i--,k--){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             $(coor).html(downArr[j-1][k])
+          }
+        }
+        
+        for(j=1;j<=4;j++){
+          for(i=4;i>1;i--){
+            var coor = "#"+i+"x"+">#"+j+"c"; 
+            var nextCoor = "#"+(i-1)+"x"+">#"+j+"c";
+            if($(coor).html()==$(nextCoor).html()) {
+                $(coor).html(parseInt($(coor).html())+parseInt($(nextCoor).html()));
+                $(nextCoor).html("");
+                
+            }
+          }
+        }
+        
+        downArr = [[],[],[],[]];
+        
+        for(j=1;j<=4;j++){
+          for(i=1;i<=4;i++){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             if($(coor).html()!="") {
+              downArr[j-1].push($(coor).html());
+               $(coor).html("");
+            }
+          }
+        }
+        
+        for(j=1;j<=4;j++){
+          for(i=4,k=downArr[j-1].length-1;i>=1;i--,k--){
+             var coor = "#"+i+"x"+">#"+j+"c";
+             $(coor).html(downArr[j-1][k])
+          }
+        }
+         var newpos = getCurrent();
+        var movement = false;
+        
+        for (i=0;i<4;i++) {
+          for (j=0;j<4;j++) {
+            if(current[i][j]!=newpos[i][j]){
+                movement = true;
+            }
+          }
+        }
+        
+        if (movement) {
+        generateNum();
+        }
+      }
+      
+      function getCurrent() {
+       var current = [[],[],[],[]];
+        for (i=1;i<=4;i++) {
+          for(j=1;j<=4;j++){
+            var coor = "#"+i+"x"+">#"+j+"c";
+            current[i-1].push($(coor).html());
+            }
+          }
+        
+        return current;
+      }
+      
+      function keepgoing() {
+        var keepgoing = false;
+        
+        for (i=1;i<=4;i++) {
+          for(j=2;j<=4;j++){
+            var coor = "#"+i+"x"+">#"+j+"c";
+            var pcoor = "#"+(i)+"x"+">#"+(j-1)+"c";
+                if($(coor).html()==$(pcoor).html()){
+                keepgoing = true;
+                }
+            }
+          }
+      
+        for (k=1;k<=4;k++) {
+          for(l=1;l<=4;l++){
+            var coor = "#"+l+"x"+">#"+k+"c";
+            var pcoor = "#"+(l-1)+"x"+">#"+(k)+"c";
+                if($(coor).html()==$(pcoor).html()){
+                keepgoing = true;
+                }
+            }
+          }
+        
+        for (m=1;m<=4;m++) {
+          for(n=1;n<=4;n++){
+            var coor = "#"+m+"x"+">#"+n+"c";
+                if($(coor).html()==''){
+                keepgoing = true;
+                }
+            }
+          }
+        
+        
+        return keepgoing;
+        
+      }
+      
+      
+      
+      
+      
+      //execute movement when arrow key is pressed
+      $(document).ready(function(){
+        $("body").keydown(function(e){
+        // left arrow
+            if ((e.keyCode || e.which) == 37){   
+        // do something
+              moveLeft();
+            }
+        // right arrow
+            if ((e.keyCode || e.which) == 39){
+                moveRight();
+            }
+        // up arrow
+            if ((e.keyCode || e.which) == 38){
+                moveUp();
+            }   
+        // down arrow
+            if ((e.keyCode || e.which) == 40){
+                moveDown();
+            }
+          
+            if (!keepgoing()) {
+                $('#point').append('YOU LOSE!!')
+            }
+          
+        })
+      });
+      
+      $("table").on("swiperight",function(){
+        moveRight();
+        if (!keepgoing()) {
+                $('#point').append('YOU LOSE!!')
+            }
+      });
+      
+      $("body").on("swipeleft",function(){
+        moveLeft();
+        if (!keepgoing()) {
+                $('#point').append('YOU LOSE!!')
+            }
+      });
+      
+      $("body").on("swipeup",function(){
+        moveUp();
+        if (!keepgoing()) {
+                $('#point').append('YOU LOSE!!')
+            }
+      });
+      
+      $("body").on("swipedown",function(){
+        moveDown();
+        if (!keepgoing()) {
+                $('#point').append('YOU LOSE!!')
+            }
+      });
+      
+      
+    </script>
+  </head>
+  <body>    
+     <!--
+    <div align="center"><p onclick=""><font size="3px" color="white">Start!</font></p></div>
+    <div align="center" top-margin="-10px"><p onclick=""><font size="3px" color="white">Randomize</font></p></div>
+    <div align="center" top-margin="-10px"><p onclick=""><font size="3px" color="white">Try AI!</font></p></div>
+    -->
+    <p id='point'>Status: </p>
+    <table border="1" style="width:275px" bgcolor="light green">
+      <tr id='1x'>
+        <td id='1c'></td>
+        <td id='2c'></td>
+        <td id='3c'></td>
+        <td id='4c'></td>
+      </tr>
+      <tr id='2x'>
+        <td id='1c'></td>
+        <td id='2c'></td>
+        <td id='3c'></td>
+        <td id='4c'></td>
+      </tr>
+      <tr id='3x'>
+        <td id='1c'></td>
+        <td id='2c'></td>
+        <td id='3c'></td>
+        <td id='4c'>2</td>
+      </tr>
+      <tr id='4x'>
+        <td id='1c'></td>
+        <td id='2c'></td>
+        <td id='3c'></td>
+        <td id='4c'></td>
+      </tr>
+    </table>
+    
+    
+    <script>
+      
+        
+        
+      
+    </script>
+   
+    
+  </body>
+</html>
